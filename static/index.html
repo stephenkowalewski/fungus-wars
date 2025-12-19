@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Fungus Wars</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" type="text/css" href="/static/css/common.css" />
+	<script src="/static/js/common.js"></script>
+	<script src="/static/js/main_page.js"></script>
+</head>
+<body>
+	<h1>Fungus Wars</h1>
+
+	<h2>Create or join a Lobby</h2>
+	<div id="lobby_notice"></div>
+	<form id="lobby_form" action="/lobby/join" formmethod="get">
+		<table>
+			<tr>
+				<td><label for="lname">Lobby Name:</label></td>
+				<td class="column_gap"></td>
+				<td>
+					<input type="text" list="open-lobbies" id="lname" name="lobby" autofocus autocomplete="off">
+					<datalist id="open-lobbies">
+						<option value="lobby1">
+					</datalist>
+				</td>
+			</tr>
+			<tr>
+				<td><label for="pname">Player Name:</label></td>
+				<td class="column_gap"></td>
+				<td><input type="text" id="pname" name="player-name" placeholder="optional"></td>
+			</tr>
+			<tr>
+				<td style="display: flex; justify-content: space-between; align-items: center;">
+					<label for="pcolor">Color:</label>
+					<span class="colorbox" id="pcolor_preview" style="display: none; text-align: right"></span>
+				</td>
+				<td class="column_gap"></td>
+				<td>
+					<input type="text" id="pcolor" name="player-color" placeholder="hex (rgb)" oninput="previewColorInput()">
+					<div id="pcolor_message"></div>
+				</td>
+				<td>
+					<span onclick="randomizeColor()">&nbsp;&#x1F3B2;</span>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td class="column_gap"></td>
+				<td><input type="submit" id="join_lobby" value="Go" style="width: 100%"></td>
+			</tr>
+		</table>
+	</form>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			restorePlayerInfo();
+			processURLArgs();
+			updateOpenLobbyList();
+			setInterval(updateOpenLobbyList, 5000);
+
+			updateLobbyNotice();
+		});
+
+		document.getElementById("lobby_form").addEventListener("submit", function () {
+			storePlayerInfo();
+		});
+	</script>
+	<noscript>JavaScript is disabled. Javascript needs to be enabled to play Fungus Wars</noscript>
+
+	<br><br>
+	<a href="#" onclick="displayHowToPlay()">How to play</a>
+</body>
+</html>

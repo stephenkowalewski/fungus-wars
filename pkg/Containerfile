@@ -1,0 +1,37 @@
+# ---------------
+# Compile stage
+# ---------------
+
+FROM docker.io/library/golang:1.24-alpine AS builder
+RUN apk add --no-cache make git
+
+WORKDIR /src
+
+COPY go.mod go.sum ./
+RUN go mod download
+
+COPY . .
+
+ARG VERSION
+ARG DATE
+RUN make build VERSION="$VERSION" DATE="$DATE"
+
+
+# ---------------
+# Runtime stage
+# ---------------
+
+FROM gcr.io/distroless/base-debian13
+
+WORKDIR /app
+
+# Copy binary and static assets
+COPY --from=builder /src/fungus-wars /app/fungus-wars
+COPY --from=builder /src/static /app/static
+
+EXPOSE 8080
+
+USER nonroot:nonroot
+
+ENTRYPOINT ["/app/fungus-wars"]
+

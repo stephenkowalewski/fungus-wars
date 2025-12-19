@@ -1,0 +1,20 @@
+[Unit]
+Description=Fungus Wars Web Server
+After=network.target
+
+[Service]
+Type=simple
+Restart=on-failure
+
+User=fungus-wars
+Group=fungus-wars
+WorkingDirectory=/usr/share/fungus-wars
+EnvironmentFile=-/etc/fungus-wars.env
+Environment="PATH=/usr/local/bin:/usr/bin:/bin"
+ExecStart=fungus-wars $FUNGUS_WARS_ARGS
+
+ExecReload=/bin/kill -SIGUSR1 $MAINPID
+
+[Install]
+WantedBy=multi-user.target
+

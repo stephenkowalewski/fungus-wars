@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title class="lobby_name">Fungus Wars (Lobby)</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" type="text/css" href="/static/css/common.css" />
+	<script src="/static/js/vars.js"></script>
+	<script src="/static/js/common.js"></script>
+	<script src="/static/js/game_piece.js"></script>
+	<script src="/static/js/lobby.js"></script>
+</head>
+<body>
+	<h2 class="lobby_name"></h2>
+	<h3>Welcome <span class="whoami">User</span>.</h3>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			setContentByClass("Lobby: " + getCookie("lobby-name"), "lobby_name");
+			setContentByClass(getCookie("player-name"), "whoami");
+		});
+	</script>
+
+	<br>
+	<p>Members:</p>
+	<br>
+	<div id="member-list"></div>
+	<br>
+
+	<br>
+	<table id="lobby-game-options">
+		<tr>
+			<td>Board Size:</td>
+			<td class="column_gap"></td>
+			<td><span id="board-size-rows">NN</span>x<span id="board-size-cols">NN</span></td>
+			<td class="column_gap"></td>
+			<td><input type="range" id="board-size-slider" min="10" max="50" value="20" step="1"></td>
+		</tr>
+		<tr>
+			<td>Randomize Start Positions</td>
+			<td class="column_gap"></td>
+			<td><input type="checkbox" id="rand-start-pos-checkbox"></td>
+			<td class="column_gap"></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>Starting Bites:</td>
+			<td class="column_gap"></td>
+			<td><span id="starting-bites">N</span></td>
+			<td class="column_gap"></td>
+			<td><input type="range" id="starting-bites-slider" min="0" max="20" value="4" step="1"></td>
+		</tr>
+		<tr>
+			<td>Create Bonus Bite Cells:</td>
+			<td class="column_gap"></td>
+			<td><input type="checkbox" id="bonus-bite-cells-checkbox" checked></td>
+			<td class="column_gap"></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>Starting Rerolls:</td>
+			<td class="column_gap"></td>
+			<td><span id="starting-rerolls">N</span></td>
+			<td class="column_gap"></td>
+			<td><input type="range" id="starting-rerolls-slider" min="0" max="100" value="3" step="1"></td>
+		</tr>
+		<tr>
+			<td>Bonus Reroll Cells:</td>
+			<td class="column_gap"></td>
+			<td><span id="bonus-reroll-cells">N</span></td>
+			<td class="column_gap"></td>
+			<td><input type="range" id="bonus-reroll-cells-slider" min="0" max="100" value="3" step="1"></td>
+		</tr>
+		<tr>
+			<td title="Higher numbers lead to bites more often. Zero disables new bites.">New Bite Frequency Adjustment:</td>
+			<td class="column_gap"></td>
+			<td><span id="new-bite-freq-factor">N</span></td>
+			<td class="column_gap"></td>
+			<td><input type="range" id="new-bite-freq-factor-slider" min="0" max="4" value="1.0" step="0.1"></td>
+		</tr>
+		<tr>
+			<td title="Dictates how pieces get captured">Capture mode:</td>
+			<td class="column_gap"></td>
+			<td><span id="capture-mode"></span></td>
+			<td class="column_gap"></td>
+			<td>
+				<select id="capture-mode-choice">
+					 <option value="">-- Choose capture mode --</option>
+				</select></td>
+		</tr>
+		<tr>
+			<td>Use custom piece set:</td>
+			<td class="column_gap"></td>
+			<td><input type="checkbox" id="use-custom-piece-set-checkbox"></td>
+			<td class="column_gap"></td>
+			<td></td>
+		</tr>
+	</table>
+
+	<div id="custom-pieces-container" style="display:none">
+		<br>
+			<p style="padding-left: 25px;">
+				Click a piece to edit.
+				Weight &divide; total weight is the probability of a piece getting chosen.
+			</p>
+		<br>
+		<table id="custom-pieces-table"></table>
+		<button type="button" onclick="addCustomPieceRowToTable(this.parentElement.querySelector('table'))">Add piece</button>
+	</div>
+
+	<br>
+	<table id="lobby-button-table">
+		<tr>
+			<td><button type="button" id="start_game" onclick="startGame()">Start Game</button></td>
+		</tr>
+		<tr>
+			<td><button type="button" id="invite" onclick="showInviteLink()">Show Invite Link</button></td>
+			<td><button type="button" title="Set game options to the defaults" onclick="setGameOptionsToDefaults()">Reset Options</button></td>
+			<td><button type="button" onclick="window.location.replace('/lobby/leave')">Leave Lobby</button></td>
+		</tr>
+	</table>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			setupGameOptionInputs();
+			updateLobbyMembers();
+			setInterval(updateLobbyMembers, 2000);
+		});
+	</script>
+
+	<br>
+	<a href="#" onclick="displayHowToPlay()">How to play</a>
+</body>
+</html>

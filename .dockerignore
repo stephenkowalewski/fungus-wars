@@ -1,0 +1,14 @@
+# compiled binary
+fungus-wars
+# auto-generated files
+static/js/vars.js
+static/modal/how_to_play.html
+# builds
+build/
+# packages files
+pkg/
+# misc
+*.swp
+.vscode/
+test.crt
+test.key

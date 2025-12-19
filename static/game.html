@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Fungus Wars</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" type="text/css" href="/static/css/common.css" />
+	<script src="/static/js/vars.js"></script>
+	<script src="/static/js/common.js"></script>
+	<script src="/static/js/game_piece.js"></script>
+	<script src="/static/js/game.js"></script>
+</head>
+<body>
+	<h1>Fungus Wars</h1>
+	<div id="game_over"></div>
+	<div id="game_errors" title="Click to clear" onclick="this.innerHTML=''"></div>
+	<div id="idle_warning"></div>
+	<div id="reconnect"></div>
+
+	<div id="game-container">
+		<div id="game-board"></div>
+		<div id="game-sidebar">
+			<div id="player-list">
+				<div id="player1-info" class="player-info">
+					<div class="player-row">
+						<span id="player1-color" class="colorbox" style="display: flex"></span>
+						<span id="player1-name" class="player-name">Player 1</span>
+					</div>
+					<div>&nbsp;&nbsp;Score: <span id="player1-score">0</span></div>
+					<div>&nbsp;&nbsp;Bites:
+						<span id="player1-bites">0</span>
+						<span id="player1-bite-change-indicator" class="bite-change-indicator"></span>
+					</div>
+					<div>Rerolls: <span id="player1-rerolls">0</span></div>
+					<div>
+						W: <span id="player1-wins"></span>
+						L: <span id="player1-losses"></span>
+						D: <span id="player1-draws"></span>
+					</div>
+				</div>
+				<div id="player2-info" class="player-info">
+					<div class="player-row">
+						<span id="player2-color" class="colorbox" style="display: flex"></span>
+						<span id="player2-name" class="player-name">Player 2</span>
+					</div>
+					<div>&nbsp;&nbsp;Score: <span id="player2-score">0</span></div>
+					<div>&nbsp;&nbsp;Bites:
+						<span id="player2-bites">0</span>
+						<span id="player2-bite-change-indicator" class="bite-change-indicator"></span>
+					</div>
+					<div>Rerolls: <span id="player2-rerolls">0</span></div>
+					<div>
+						W: <span id="player2-wins"></span>
+						L: <span id="player2-losses"></span>
+						D: <span id="player2-draws"></span>
+					</div>
+				</div>
+				<div id="player3-info" class="player-info">
+					<div class="player-row">
+						<span id="player3-color" class="colorbox" style="display: flex"></span>
+						<span id="player3-name" class="player-name">Player 3</span>
+					</div>
+					<div>&nbsp;&nbsp;Score: <span id="player3-score">0</span></div>
+					<div>&nbsp;&nbsp;Bites:
+						<span id="player3-bites">0</span>
+						<span id="player3-bite-change-indicator" class="bite-change-indicator"></span>
+					</div>
+					<div>Rerolls: <span id="player3-rerolls">0</span></div>
+					<div>
+						W: <span id="player3-wins"></span>
+						L: <span id="player3-losses"></span>
+						D: <span id="player3-draws"></span>
+					</div>
+				</div>
+				<div id="player4-info" class="player-info">
+					<div class="player-row">
+						<span id="player4-color" class="colorbox" style="display: flex"></span>
+						<span id="player4-name" class="player-name">Player 4</span>
+					</div>
+					<div>&nbsp;&nbsp;Score: <span id="player4-score">0</span></div>
+					<div>&nbsp;&nbsp;Bites:
+						<span id="player4-bites">0</span>
+						<span id="player4-bite-change-indicator" class="bite-change-indicator"></span>
+					</div>
+					<div>Rerolls: <span id="player4-rerolls">0</span></div>
+					<div>
+						W: <span id="player4-wins"></span>
+						L: <span id="player4-losses"></span>
+						D: <span id="player4-draws"></span>
+					</div>
+				</div>
+			</div>
+			<div id="next-turn-preview">
+				<div>
+					<div>Next:</div>
+					<div class="player-name"></div>
+				</div>
+				<div id="next-turn" class="next-turn" onclick="pieceSelectNextRotation()"></div>
+			</div>
+		</div>
+	</div>
+
+	<br>
+	<div id="button-panel">
+		<button id="rotatePiece" title="shortcut key: space" class="sendNotification" onclick="pieceSelectNextRotation()">Rotate piece</button>
+		<button id="skipTurn" title="shortcut key: s" class="sendNotification" onclick="sendSkipTurn()">Skip Turn</button>
+		<button id="smallBite" title="shortcut key: b" class="sendState" onclick="toggleBite(this);">Bite</button>
+		<button id="largeBite" title="shortcut key: b" class="sendState" onclick="toggleBite(this);">Large Bite</button>
+		<button id="reroll" title="shortcut key: r" class="sendNotification" onclick="sendReroll()">Reroll</button>
+	</div>
+	<br>
+	<div><p>Game Actions:</p></div>
+	<br>
+	<button onclick="restartGame()">Restart game</button>
+	<button onclick="forfeitGame()">Forfeit game</button>
+	<button onclick="window.location.replace('/game/leave')">Leave game</button>
+	<button onclick="gameWsConnect()">Re-establish connection</button>
+	<br><br>
+	<a href="#" onclick="displayHowToPlay()">How to play</a>
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			initVars();
+			gameWsConnect();
+			setHandlers();
+		});
+	</script>
+</body>
+</html>

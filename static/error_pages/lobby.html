@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Fungus Wars</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" type="text/css" href="/static/css/common.css">
+</head>
+<body>
+	<p><b id="error_message">Lobby Error</b></p>
+	<p id="error_hint"></p>
+	<br>
+	<p>Click <a href="/">here</a> to go back to the start page. You will be automatically redirected in <span id="counter">10</span> second<span class="counter-plural">s</span>.</p>
+	<script>
+		var error = document.location.search.split(/[?&]/).filter(function(f){return f.startsWith("err=")}) 
+		if (error.length > 0) {
+			error = decodeURIComponent(error[0]).substr(4)
+			const msg = document.getElementById("error_message");
+			const hint = document.getElementById("error_hint");
+			switch (error) {
+				case "lobby_full":
+					msg.textContent = "Oh no, the lobby you are looking for is already full.";
+					break;
+				case "invalid_lobby_name":
+					msg.textContent = "Lobby name is missing or invalid.";
+					hint.textContent = "Valid lobby names are 1 to 32 characters and only contain letters, numbers, dashes, and underscores.";
+					break;
+				case "invalid_color":
+					msg.textContent = "Unable to parse player color";
+					hint.textContent = "Ensure selected color is in the form #NNN or #NNNNNN, where N is a hexadecimal digit and # is optional.";
+					break;
+				case "duplicate_player_color":
+					msg.textContent = "The lobby already contains a player or game element with the same color.";
+					break;
+				case "duplicate_player_name":
+					msg.textContent = "The lobby already contains a player with the same name.";
+					break;
+				case "game_started":
+					msg.textContent = "The game has already started.";
+					break;
+				case "not_in_lobby":
+					msg.textContent = "You are not in a lobby.";
+					break;
+				case "not_enough_players":
+					msg.innerHTML = "A game requires at least two players. <a href='/lobby'>Go back to the lobby?</a>";
+					break;
+				case "missing_cookie":
+					msg.innerHTML = "Something went wrong. Error was 'Missing Cookie'.";
+					break;
+				default:
+					msg.innerHTML = "Something went wrong. Unknown Error.";
+					break;
+			}
+		}
+
+		setInterval(function() {
+			var counter = document.getElementById("counter");
+			var count = Number(counter.textContent) - 1;
+			counter.textContent = count;
+			if (count == 1) {
+				var plurals = document.getElementsByClassName("counter-plural")
+				for (var i = 0; i < plurals.length; i++) try { plurals.item(i).textContent="" } finally {};
+			}
+			if (count <= 0) {
+				window.location.replace("/");
+			}
+		}, 1000);
+	</script>
+</body>
+</html>

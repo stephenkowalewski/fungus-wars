@@ -1,0 +1,340 @@
+/* Reset + Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Courier New', Courier, monospace;
+  background-color: #111;
+  color: #eee;
+  min-height: 100vh;
+  width: 80%;
+  margin: 0 auto;
+  text-align: left;
+}
+
+h1 {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+h2 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+a {
+  color: green;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+#lobby-game-options td {
+  height: 26px;
+}
+
+#lobby-button-table {
+  border-collapse: separate;
+  border-spacing: 5px 20px;
+}
+
+#custom-pieces-table input {
+  width: 50px;
+}
+
+#custom-pieces-table td {
+  padding: 5px 0px;
+}
+
+.custom-piece-preview {
+  width: 160px;
+  border: 1px solid #999;
+  position: relative;
+  display: grid;
+  padding: 8%;
+}
+
+.custom-piece-preview > div {
+  width: 100%;
+  /*height: 100%;*/
+  aspect-ratio: 1 / 1;
+  border: 1px solid #333;
+  box-sizing: border-box;
+}
+
+.full-screen-modal-overlay {
+  background-color: #000d;
+  inset: 0;
+  min-height: 100vh;
+  overflow-y: auto;
+  padding: 5%;
+  position: fixed;
+  z-index: 3;
+}
+
+.full-screen-modal-overlay h1 {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.full-screen-modal-overlay p {
+  margin-bottom: 1em;
+}
+
+.invite-container {
+  background-color: #000;
+  border: 1px solid #333;
+  padding: 20px;
+}
+
+.invite-container a {
+  padding: 20px;
+}
+
+.invite-container pre {
+  padding-left: 20px;
+}
+
+.error {
+  color: red;
+}
+
+.warning {
+  color: yellow;
+}
+
+.column_gap {
+  width: 5px;
+}
+
+.column_gap_large {
+  width: 25px;
+}
+
+/* Box to show player's color next to their name in lobby or game. */
+/* Background color will be set separately. */
+.colorbox {
+  width: 18px;
+  height: 18px;
+  border: 1px solid #333;
+}
+
+/* Cell Styles */
+.cell {
+  background-color: #222;
+  border: 1px solid #333;
+  transition: background-color 0.3s;
+
+  display: flex;
+  justify-content: center; /* horizontal */
+  align-items: center;     /* vertical */
+  text-align: center;
+  text-overflow: clip;
+  overflow: hidden;
+
+  container-type: size;
+}
+
+.cell-content {
+  font-size: 60cqh;
+  text-align: center;
+  text-overflow: clip;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.cell.hover-piece-local {
+  filter: brightness(1.5);
+  z-index: 2;
+}
+
+.cell.hover-piece-remote {
+  filter: brightness(1.25);
+  z-index: 2;
+}
+
+.cell.hover-bite-local {
+  filter: brightness(0.5);
+  z-index: 2;
+}
+
+.cell.hover-bite-remote {
+  filter: brightness(0.75);
+  z-index: 2;
+}
+
+/* created by gameWsHandleMsgPlayerInfo():
+ *  .cell.player1
+ *  .cell.player2
+ *  .cell.player3
+ *  .cell.player4
+ */
+
+.spacer {
+  background: transparent;
+  border: 0 !important;
+}
+
+/* Button Styles */
+button {
+  background-color: #333;
+  color: #eee;
+  border: 1px solid #666;
+  padding: 6px 6px;
+  margin: 0px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.0s;
+  position: relative;
+  display: inline-block;
+}
+
+/* create underline pseudo-element shown via .active or .notify */
+button::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 4px; /* underline thickness */
+  background: green;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.1s linear;
+}
+
+button.active, button.notify {
+  background-color: #181818;
+}
+
+button.active::after, button.notify::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+button:hover {
+  background-color: #555;
+}
+
+button:disabled {
+  background-color: #333;
+  color: #777;
+  cursor: auto;
+}
+
+/* Player-info underline animation (mirrors button behavior) */
+.player-info {
+  position: relative;
+}
+
+/* underline pseudo-element */
+.player-info::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 4px; /* underline thickness */
+  background: green;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.1s linear;
+}
+
+/* show underline when it's the player's turn */
+.player-info.player-turn::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+
+
+#game-container {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 20px;
+}
+
+#game-board {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr); /* overridden on element in initializeGameBoard() */
+  grid-template-rows: repeat(10, 1fr); /* overridden on element in initializeGameBoard() */
+  gap: 0px;
+  margin: 20px auto;
+  background-color: #000;
+  padding: 10px;
+  border: 2px solid #444;
+  /* Make the board responsive and square */
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  max-width: 80vh;
+}
+
+#game-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+#player-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.player-info {
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.player-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.bite-change-indicator {
+  font-weight: bold;
+}
+
+.player-name {
+  display: inline;
+  font-size: 1.17em;
+  font-weight: bold;
+  margin: 0;
+  color: inherit;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+#next-turn-preview {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-top: auto;
+  margin-bottom: 20px;
+}
+
+#next-turn {
+  width: 80%;
+  border: 1px solid #999;
+  position: relative;
+  display: grid;
+  padding: 8%;
+}
+
+#next-turn > div {
+  width: 100%;
+  /*height: 100%;*/
+  aspect-ratio: 1 / 1;
+  border: 1px solid #333;
+  box-sizing: border-box;
+}
+
